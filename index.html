@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Eu e Você 💘</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #ffeaf4, #ffeef2);
+      color: #d6336c;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    #contador {
+      font-size: 1.3rem;
+      margin: 20px 0;
+    }
+
+    .carousel {
+      position: relative;
+      max-width: 300px;
+      margin: auto;
+    }
+
+    .carousel img {
+      width: 100%;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .carousel-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .carousel-buttons button {
+      background-color: #ff99bb;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    #qrcode {
+      margin: 30px auto;
+    }
+
+    audio {
+      margin-top: 20px;
+    }
+
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      #contador {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>💖 Eu e Você 💖</h1>
+
+  <div id="contador">Carregando...</div>
+
+  <!-- Carrossel -->
+  <div class="carousel">
+    <img id="fotoAtual" src="fotos/foto1.jpg" alt="Foto nossa">
+    <div class="carousel-buttons">
+      <button onclick="anterior()">⟨</button>
+      <button onclick="proxima()">⟩</button>
+    </div>
+  </div>
+
+  <!-- QR Code -->
+  <div id="qrcode"></div>
+
+  <!-- Música de fundo -->
+  <audio controls autoplay loop>
+    <source src="musica.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
+  </audio>
+
+  <script>
+    // Data de início do namoro
+    const dataInicio = new Date("2023-01-01T00:00:00");
+
+    function atualizarContador() {
+      const agora = new Date();
+      const diff = agora - dataInicio;
+
+      const segundos = Math.floor(diff / 1000);
+      const minutos = Math.floor(segundos / 60);
+      const horas = Math.floor(minutos / 60);
+      const dias = Math.floor(horas / 24);
+
+      const anos = Math.floor(dias / 365);
+      const meses = Math.floor((dias % 365) / 30);
+      const diasRestantes = dias % 30;
+
+      const horasHoje = horas % 24;
+      const minutosHoje = minutos % 60;
+      const segundosHoje = segundos % 60;
+
+      document.getElementById("contador").innerText =
+        `Estamos juntos há ${anos} anos, ${meses} meses, ${diasRestantes} dias, ` +
+        `${horasHoje}h ${minutosHoje}min ${segundosHoje}s 💕`;
+    }
+
+    setInterval(atualizarContador, 1000);
+    atualizarContador();
+
+    // Fotos do carrossel
+    const fotos = [
+      "fotos/foto1.jpg",
+      "fotos/foto2.jpg",
+      "fotos/foto3.jpg"
+    ];
+    let fotoIndex = 0;
+    const img = document.getElementById("fotoAtual");
+
+    function proxima() {
+      fotoIndex = (fotoIndex + 1) % fotos.length;
+      img.src = fotos[fotoIndex];
+    }
+
+    function anterior() {
+      fotoIndex = (fotoIndex - 1 + fotos.length) % fotos.length;
+      img.src = fotos[fotoIndex];
+    }
+
+    // QR Code com o link da página
+    new QRCode(document.getElementById("qrcode"), {
+      text: window.location.href,
+      width: 128,
+      height: 128,
+    });
+  </script>
+</body>
+</html>
