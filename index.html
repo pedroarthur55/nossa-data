@@ -26,11 +26,59 @@
             margin-bottom: 10px;
         }
 
+        #texto-contador {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #ff4d88;
+        }
+
         #contador {
             font-size: 1.3rem;
             margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            color: #d6336c;
+            font-weight: 600;
         }
 
+        /* Estilo para cada bloco de tempo */
+        .tempo-bloco {
+            min-width: 60px;
+            padding: 5px 10px;
+            border-radius: 12px;
+            background: #ffe0ef;
+            box-shadow: 0 2px 6px rgba(255, 77, 136, 0.3);
+            position: relative;
+            font-size: 1.3rem;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Animação quando o número atualiza */
+        .atualizado {
+            animation: piscar-numero 0.5s ease forwards;
+            background-color: #ff4d88;
+            color: white;
+            box-shadow: 0 0 12px #ff4d88;
+        }
+
+        @keyframes piscar-numero {
+            0% {
+                background-color: #ff4d88;
+                color: white;
+                box-shadow: 0 0 12px #ff4d88;
+            }
+
+            100% {
+                background-color: #ffe0ef;
+                color: #d6336c;
+                box-shadow: 0 2px 6px rgba(255, 77, 136, 0.3);
+            }
+        }
+
+        /* Restante do seu CSS (carousel, modal, etc) permanece igual */
         .carousel-container {
             width: 320px;
             margin: 30px auto 10px auto;
@@ -48,7 +96,6 @@
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
             margin-bottom: 0;
             overflow: visible;
-            /* mostra imagens que saem do container */
         }
 
         .carousel img {
@@ -101,7 +148,6 @@
             display: flex;
             justify-content: space-between;
             margin-top: 330px;
-            /* para ficar abaixo das fotos */
             z-index: 20;
         }
 
@@ -146,7 +192,6 @@
             margin-right: auto;
         }
 
-        /* Modal */
         #modal {
             position: fixed;
             top: 0;
@@ -206,6 +251,10 @@
                 font-size: 2.5rem;
             }
 
+            #texto-contador {
+                font-size: 1.2rem;
+            }
+
             #contador {
                 font-size: 1rem;
             }
@@ -251,7 +300,6 @@
 
 <body onclick="tocarMusica()">
 
-    <!-- Modal romântico -->
     <div id="modal">
         <div id="modal-content">
             <h2>✨ Oi, meu amor! ✨</h2>
@@ -262,7 +310,10 @@
 
     <h1>💖 Eu e Você 💖</h1>
 
-    <div id="contador">Carregando...</div>
+    <div id="texto-contador">Estamos juntos há</div>
+    <div id="contador">
+        <!-- Aqui os blocos de tempo vão aparecer -->
+    </div>
 
     <div class="carousel-container">
         <div class="carousel">
@@ -308,7 +359,6 @@
                 dias--;
             }
             if (dias < 0) {
-                // Corrige dias pegando os dias do mês anterior
                 const mesAnterior = new Date(fim.getFullYear(), fim.getMonth(), 0);
                 dias += mesAnterior.getDate();
                 meses--;
@@ -321,25 +371,79 @@
             return { anos, meses, dias, horas, minutos, segundos };
         }
 
+        // Cria os blocos de tempo para mostrar no contador
+        const contadorDiv = document.getElementById("contador");
+
+        const blocosTempo = [
+            { id: "anos", labelSingular: "ano", labelPlural: "anos", valor: 0 },
+            { id: "meses", labelSingular: "mês", labelPlural: "meses", valor: 0 },
+            { id: "dias", labelSingular: "dia", labelPlural: "dias", valor: 0 },
+            { id: "horas", labelSingular: "h", labelPlural: "h", valor: 0 },
+            { id: "minutos", labelSingular: "min", labelPlural: "min", valor: 0 },
+            { id: "segundos", labelSingular: "s", labelPlural: "s", valor: 0 }
+        ];
+
+        // Inicializa o HTML dos blocos no contador
+        function inicializarBlocos() {
+            contadorDiv.innerHTML = "";
+            blocosTempo.forEach(bloco => {
+                const span = document.createElement("span");
+                span.id = bloco.id;
+                span.className = "tempo-bloco";
+                span.textContent = "0 " + bloco.labelPlural;
+                contadorDiv.appendChild(span);
+            });
+        }
+
+        // Atualiza os blocos individualmente com animação se o valor mudou
+        function atualizarBlocos(diff) {
+            blocosTempo.forEach(bloco => {
+                let novoValor;
+                switch (bloco.id) {
+                    case "anos":
+                        novoValor = diff.anos;
+                        break;
+                    case "meses":
+                        novoValor = diff.meses;
+                        break;
+                    case "dias":
+                        novoValor = diff.dias;
+                        break;
+                    case "horas":
+                        novoValor = diff.horas;
+                        break;
+                    case "minutos":
+                        novoValor = diff.minutos;
+                        break;
+                    case "segundos":
+                        novoValor = diff.segundos;
+                        break;
+                }
+                if (bloco.valor !== novoValor) {
+                    bloco.valor = novoValor;
+                    const span = document.getElementById(bloco.id);
+                    const label = (novoValor === 1) ? bloco.labelSingular : bloco.labelPlural;
+                    span.textContent = novoValor + " " + label;
+
+                    // Adiciona a classe de animação
+                    span.classList.add("atualizado");
+                    // Remove a classe após a animação
+                    setTimeout(() => {
+                        span.classList.remove("atualizado");
+                    }, 500);
+                }
+            });
+        }
+
         function atualizarContador() {
             const agora = new Date();
             const diff = diferencaDatas(dataInicio, agora);
-
-            const partes = [];
-            if (diff.anos > 0) partes.push(`${diff.anos} ${diff.anos === 1 ? 'ano' : 'anos'}`);
-            if (diff.meses > 0) partes.push(`${diff.meses} ${diff.meses === 1 ? 'mês' : 'meses'}`);
-            if (diff.dias > 0) partes.push(`${diff.dias} ${diff.dias === 1 ? 'dia' : 'dias'}`);
-
-            const horas = diff.horas.toString().padStart(2, '0');
-            const minutos = diff.minutos.toString().padStart(2, '0');
-            const segundos = diff.segundos.toString().padStart(2, '0');
-
-            document.getElementById("contador").innerText =
-                `Estamos juntos há ${partes.join(', ')}, ${horas}h ${minutos}min ${segundos}s 💕`;
+            atualizarBlocos(diff);
         }
 
-        setInterval(atualizarContador, 1000);
+        inicializarBlocos();
         atualizarContador();
+        setInterval(atualizarContador, 1000);
 
         function tocarMusica() {
             const musica = document.getElementById("musica");
