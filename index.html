@@ -2,324 +2,401 @@
 <html lang="pt-br">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>Eu e Você 💘</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <title>Eu e Você 💘</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;600&display=swap"
+        rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Quicksand', sans-serif;
-      background: linear-gradient(to right, #ffeaf4, #ffeef2);
-      color: #d6336c;
-      text-align: center;
-      padding: 2rem;
-      overflow-x: hidden;
-    }
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(to right, #ffeaf4, #ffeef2);
+            color: #d6336c;
+            text-align: center;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
 
-    h1 {
-      font-family: 'Great Vibes', cursive;
-      font-size: 3rem;
-      color: #ff4d88;
-      margin-bottom: 10px;
-    }
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            color: #ff4d88;
+            margin-bottom: 10px;
+        }
 
-    #contador {
-      font-size: 1.3rem;
-      margin: 20px 0;
-    }
+        #contador {
+            font-size: 1.3rem;
+            margin: 20px 0;
+        }
 
-    .carousel-container {
-      width: 320px;
-      margin: 30px auto 10px auto;
-      text-align: left;
-    }
+        .carousel-container {
+            width: 320px;
+            margin: 30px auto 10px auto;
+            text-align: left;
+            position: relative;
+        }
 
-    .carousel {
-      position: relative;
-      width: 320px;
-      height: 360px;
-      background: #fff0f6;
-      padding: 1rem;
-      border-radius: 20px;
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-      margin-bottom: 0;
-    }
+        .carousel {
+            position: relative;
+            width: 320px;
+            height: 360px;
+            background: #fff0f6;
+            padding: 1rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0;
+            overflow: visible;
+            /* mostra imagens que saem do container */
+        }
 
-    .carousel img {
-      width: 300px;
-      height: 300px;
-      object-fit: cover;
-      border-radius: 15px;
-      border: 2px solid #ffb3c6;
-      transition: transform 0.3s ease;
-    }
+        .carousel img {
+            position: absolute;
+            border-radius: 15px;
+            border: 2px solid #ffb3c6;
+            object-fit: cover;
+            transition: all 0.5s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
 
-    .carousel-buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-    }
+        #fotoAtual {
+            width: 300px;
+            height: 300px;
+            top: 20px;
+            left: 10px;
+            z-index: 10;
+            transform: scale(1);
+            border-color: #ff4d88;
+            box-shadow: 0 8px 20px rgba(255, 77, 136, 0.6);
+            cursor: default;
+        }
 
-    .carousel-buttons button {
-      background-color: #ff99bb;
-      border: none;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s;
-    }
+        .foto-pilha {
+            width: 220px;
+            height: 220px;
+            top: 50px;
+            opacity: 0.7;
+            filter: blur(1px);
+            border-color: #ffb3c6;
+            box-shadow: none;
+            cursor: default;
+        }
 
-    .carousel-buttons button:hover {
-      background-color: #ff66a3;
-      transform: scale(1.1);
-    }
+        #fotoAnterior {
+            left: -80px;
+            transform: rotate(-15deg) scale(0.85);
+            z-index: 5;
+        }
 
-    #curtirBtn {
-      margin-top: 15px;
-      background: #ff66a3;
-      border: none;
-      color: white;
-      padding: 12px 20px;
-      font-size: 1.2rem;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: inline-block;
-    }
+        #fotoProxima {
+            left: 210px;
+            transform: rotate(15deg) scale(0.85);
+            z-index: 5;
+        }
 
-    #curtirBtn:hover {
-      background: #ff3366;
-      transform: scale(1.1);
-    }
+        .carousel-buttons {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 330px;
+            /* para ficar abaixo das fotos */
+            z-index: 20;
+        }
 
-    #musica {
-      margin-top: 40px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
+        .carousel-buttons button {
+            background-color: #ff99bb;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
 
-    /* Modal */
-    #modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
+        .carousel-buttons button:hover {
+            background-color: #ff66a3;
+            transform: scale(1.1);
+        }
 
-    #modal-content {
-      background: white;
-      padding: 2rem;
-      border-radius: 15px;
-      max-width: 90%;
-      text-align: center;
-    }
+        #curtirBtn {
+            margin-top: 15px;
+            background: #ff66a3;
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
 
-    #modal-content button {
-      margin-top: 1rem;
-      padding: 10px 20px;
-      background: #ff85a2;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
+        #curtirBtn:hover {
+            background: #ff3366;
+            transform: scale(1.1);
+        }
 
-    .heart {
-      position: fixed;
-      width: 20px;
-      height: 20px;
-      background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center/contain;
-      animation: float 6s linear infinite;
-      pointer-events: none;
-      opacity: 0.6;
-    }
+        #musica {
+            margin-top: 40px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-    @keyframes float {
-      0% {
-        transform: translateY(0) scale(0.5);
-        opacity: 1;
-      }
+        /* Modal */
+        #modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
 
-      100% {
-        transform: translateY(-100vh) scale(1.5);
-        opacity: 0;
-      }
-    }
+        #modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 90%;
+            text-align: center;
+        }
 
-    @media (max-width: 500px) {
-      h1 {
-        font-size: 2.5rem;
-      }
+        #modal-content button {
+            margin-top: 1rem;
+            padding: 10px 20px;
+            background: #ff85a2;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
 
-      #contador {
-        font-size: 1rem;
-      }
+        .heart {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center/contain;
+            animation: float 6s linear infinite;
+            pointer-events: none;
+            opacity: 0.6;
+        }
 
-      .carousel-container {
-        width: 280px;
-      }
+        @keyframes float {
+            0% {
+                transform: translateY(0) scale(0.5);
+                opacity: 1;
+            }
 
-      .carousel {
-        width: 280px;
-        height: 320px;
-      }
+            100% {
+                transform: translateY(-100vh) scale(1.5);
+                opacity: 0;
+            }
+        }
 
-      .carousel img {
-        width: 260px;
-        height: 260px;
-      }
-    }
-  </style>
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            #contador {
+                font-size: 1rem;
+            }
+
+            .carousel-container {
+                width: 280px;
+            }
+
+            .carousel {
+                width: 280px;
+                height: 320px;
+            }
+
+            #fotoAtual {
+                width: 260px;
+                height: 260px;
+                top: 20px;
+                left: 10px;
+            }
+
+            .foto-pilha {
+                width: 180px;
+                height: 180px;
+                top: 40px;
+            }
+
+            #fotoAnterior {
+                left: -60px;
+                transform: rotate(-15deg) scale(0.85);
+            }
+
+            #fotoProxima {
+                left: 180px;
+                transform: rotate(15deg) scale(0.85);
+            }
+
+            .carousel-buttons {
+                margin-top: 280px;
+            }
+        }
+    </style>
 </head>
 
 <body onclick="tocarMusica()">
 
-  <!-- Modal romântico -->
-  <div id="modal">
-    <div id="modal-content">
-      <h2>✨ Oi, meu amor! ✨</h2>
-      <p>Quero que saiba o quanto você é especial pra mim 💖</p>
-      <button onclick="fecharModal()">Fechar</button>
-    </div>
-  </div>
-
-  <h1>💖 Eu e Você 💖</h1>
-
-  <div id="contador">Carregando...</div>
-
-  <div class="carousel-container">
-    <div class="carousel">
-      <img id="fotoAtual" src="fotos/foto1.jpeg" alt="Foto nossa">
-      <div class="carousel-buttons">
-        <button onclick="anterior()">⟨</button>
-        <button onclick="proxima()">⟩</button>
-      </div>
+    <!-- Modal romântico -->
+    <div id="modal">
+        <div id="modal-content">
+            <h2>✨ Oi, meu amor! ✨</h2>
+            <p>Quero que saiba o quanto você é especial pra mim 💖</p>
+            <button onclick="fecharModal()">Fechar</button>
+        </div>
     </div>
 
-    <button id="curtirBtn" onclick="mostrarModal()">❤️ Curtir</button>
-  </div>
+    <h1>💖 Eu e Você 💖</h1>
 
-  <audio id="musica" controls autoplay loop>
-    <source src="musica.mp3" type="audio/mpeg">
-    Seu navegador não suporta áudio.
-  </audio>
+    <div id="contador">Carregando...</div>
 
-  <script>
-    const dataInicio = new Date("2023-11-12T00:00:00");
+    <div class="carousel-container">
+        <div class="carousel">
+            <img id="fotoAnterior" class="foto-pilha" src="fotos/foto3.jpeg" alt="Foto anterior">
+            <img id="fotoAtual" src="fotos/foto1.jpeg" alt="Foto atual">
+            <img id="fotoProxima" class="foto-pilha" src="fotos/foto2.jpeg" alt="Foto próxima">
+            <div class="carousel-buttons">
+                <button onclick="anterior()">⟨</button>
+                <button onclick="proxima()">⟩</button>
+            </div>
+        </div>
 
-    // Função para calcular diferença entre datas em anos, meses, dias, horas, minutos e segundos
-    function diferencaDatas(inicio, fim) {
-      let anos = fim.getFullYear() - inicio.getFullYear();
-      let meses = fim.getMonth() - inicio.getMonth();
-      let dias = fim.getDate() - inicio.getDate();
-      let horas = fim.getHours() - inicio.getHours();
-      let minutos = fim.getMinutes() - inicio.getMinutes();
-      let segundos = fim.getSeconds() - inicio.getSeconds();
+        <button id="curtirBtn" onclick="mostrarModal()">❤️ Curtir</button>
+    </div>
 
-      if (segundos < 0) {
-        segundos += 60;
-        minutos--;
-      }
-      if (minutos < 0) {
-        minutos += 60;
-        horas--;
-      }
-      if (horas < 0) {
-        horas += 24;
-        dias--;
-      }
-      if (dias < 0) {
-        // Corrige dias pegando os dias do mês anterior
-        const mesAnterior = new Date(fim.getFullYear(), fim.getMonth(), 0);
-        dias += mesAnterior.getDate();
-        meses--;
-      }
-      if (meses < 0) {
-        meses += 12;
-        anos--;
-      }
+    <audio id="musica" controls autoplay loop>
+        <source src="musica.mp3" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+    </audio>
 
-      return { anos, meses, dias, horas, minutos, segundos };
-    }
+    <script>
+        const dataInicio = new Date("2023-11-12T00:00:00");
 
-    function atualizarContador() {
-      const agora = new Date();
-      const diff = diferencaDatas(dataInicio, agora);
+        // Função para calcular diferença entre datas em anos, meses, dias, horas, minutos e segundos
+        function diferencaDatas(inicio, fim) {
+            let anos = fim.getFullYear() - inicio.getFullYear();
+            let meses = fim.getMonth() - inicio.getMonth();
+            let dias = fim.getDate() - inicio.getDate();
+            let horas = fim.getHours() - inicio.getHours();
+            let minutos = fim.getMinutes() - inicio.getMinutes();
+            let segundos = fim.getSeconds() - inicio.getSeconds();
 
-      const partes = [];
-      if (diff.anos > 0) partes.push(`${diff.anos} ${diff.anos === 1 ? 'ano' : 'anos'}`);
-      if (diff.meses > 0) partes.push(`${diff.meses} ${diff.meses === 1 ? 'mês' : 'meses'}`);
-      if (diff.dias > 0) partes.push(`${diff.dias} ${diff.dias === 1 ? 'dia' : 'dias'}`);
+            if (segundos < 0) {
+                segundos += 60;
+                minutos--;
+            }
+            if (minutos < 0) {
+                minutos += 60;
+                horas--;
+            }
+            if (horas < 0) {
+                horas += 24;
+                dias--;
+            }
+            if (dias < 0) {
+                // Corrige dias pegando os dias do mês anterior
+                const mesAnterior = new Date(fim.getFullYear(), fim.getMonth(), 0);
+                dias += mesAnterior.getDate();
+                meses--;
+            }
+            if (meses < 0) {
+                meses += 12;
+                anos--;
+            }
 
-      const horas = diff.horas.toString().padStart(2, '0');
-      const minutos = diff.minutos.toString().padStart(2, '0');
-      const segundos = diff.segundos.toString().padStart(2, '0');
+            return { anos, meses, dias, horas, minutos, segundos };
+        }
 
-      document.getElementById("contador").innerText =
-        `Estamos juntos há ${partes.join(', ')}, ${horas}h ${minutos}min ${segundos}s 💕`;
-    }
+        function atualizarContador() {
+            const agora = new Date();
+            const diff = diferencaDatas(dataInicio, agora);
 
-    setInterval(atualizarContador, 1000);
-    atualizarContador();
+            const partes = [];
+            if (diff.anos > 0) partes.push(`${diff.anos} ${diff.anos === 1 ? 'ano' : 'anos'}`);
+            if (diff.meses > 0) partes.push(`${diff.meses} ${diff.meses === 1 ? 'mês' : 'meses'}`);
+            if (diff.dias > 0) partes.push(`${diff.dias} ${diff.dias === 1 ? 'dia' : 'dias'}`);
 
-    function tocarMusica() {
-      const musica = document.getElementById("musica");
-      musica.play().catch(() => { });
-      document.body.onclick = null;
-    }
+            const horas = diff.horas.toString().padStart(2, '0');
+            const minutos = diff.minutos.toString().padStart(2, '0');
+            const segundos = diff.segundos.toString().padStart(2, '0');
 
-    // Carrossel
-    const fotos = [
-      "fotos/foto1.jpeg",
-      "fotos/foto2.jpeg",
-      "fotos/foto3.jpeg"
-    ];
-    let fotoIndex = 0;
-    const img = document.getElementById("fotoAtual");
+            document.getElementById("contador").innerText =
+                `Estamos juntos há ${partes.join(', ')}, ${horas}h ${minutos}min ${segundos}s 💕`;
+        }
 
-    function proxima() {
-      fotoIndex = (fotoIndex + 1) % fotos.length;
-      img.src = fotos[fotoIndex];
-    }
+        setInterval(atualizarContador, 1000);
+        atualizarContador();
 
-    function anterior() {
-      fotoIndex = (fotoIndex - 1 + fotos.length) % fotos.length;
-      img.src = fotos[fotoIndex];
-    }
+        function tocarMusica() {
+            const musica = document.getElementById("musica");
+            musica.play().catch(() => { });
+            document.body.onclick = null;
+        }
 
-    setInterval(proxima, 3000);
+        // Carrossel com fotos empilhadas
+        const fotos = [
+            "fotos/foto1.jpeg",
+            "fotos/foto2.jpeg",
+            "fotos/foto3.jpeg"
+        ];
+        let fotoIndex = 0;
 
-    // Modal
-    function mostrarModal() {
-      document.getElementById("modal").style.display = "flex";
-    }
+        const fotoAtualImg = document.getElementById("fotoAtual");
+        const fotoAnteriorImg = document.getElementById("fotoAnterior");
+        const fotoProximaImg = document.getElementById("fotoProxima");
 
-    function fecharModal() {
-      document.getElementById("modal").style.display = "none";
-    }
+        function atualizarFotos() {
+            fotoAtualImg.src = fotos[fotoIndex];
+            fotoAnteriorImg.src = fotos[(fotoIndex - 1 + fotos.length) % fotos.length];
+            fotoProximaImg.src = fotos[(fotoIndex + 1) % fotos.length];
+        }
 
-    // Corações subindo
-    setInterval(() => {
-      const heart = document.createElement("div");
-      heart.classList.add("heart");
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 6000);
-    }, 500);
-  </script>
+        function proxima() {
+            fotoIndex = (fotoIndex + 1) % fotos.length;
+            atualizarFotos();
+        }
+
+        function anterior() {
+            fotoIndex = (fotoIndex - 1 + fotos.length) % fotos.length;
+            atualizarFotos();
+        }
+
+        atualizarFotos();
+        setInterval(proxima, 3000);
+
+        // Modal
+        function mostrarModal() {
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        function fecharModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+        // Corações subindo
+        setInterval(() => {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }, 500);
+    </script>
 
 </body>
 
