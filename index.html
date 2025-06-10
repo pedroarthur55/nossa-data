@@ -89,7 +89,7 @@
         .carousel {
             position: relative;
             width: 320px;
-            height: 360px;
+            height: 420px;
             background: #fff0f6;
             padding: 1rem;
             border-radius: 20px;
@@ -110,7 +110,7 @@
 
         #fotoAtual {
             width: 300px;
-            height: 300px;
+            height: 360px;
             top: 20px;
             left: 10px;
             z-index: 10;
@@ -122,8 +122,8 @@
 
         .foto-pilha {
             width: 220px;
-            height: 220px;
-            top: 50px;
+            height: 260px;
+            top: 60px;
             opacity: 0.7;
             filter: blur(1px);
             border-color: #ffb3c6;
@@ -147,7 +147,7 @@
             position: relative;
             display: flex;
             justify-content: space-between;
-            margin-top: 330px;
+            margin-top: 390px;
             z-index: 20;
         }
 
@@ -167,17 +167,26 @@
             transform: scale(1.1);
         }
 
+        /* Botões inferiores: Curtir e Descrição */
+        .botoes-inferiores {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            max-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+            gap: 10px;
+        }
+
         #curtirBtn {
-            margin-top: 15px;
+            font-size: 1rem;
+            padding: 8px 16px;
             background: #ff66a3;
             border: none;
             color: white;
-            padding: 12px 20px;
-            font-size: 1.2rem;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: inline-block;
         }
 
         #curtirBtn:hover {
@@ -185,14 +194,46 @@
             transform: scale(1.1);
         }
 
+        #descricaoBtn {
+            background: #ffaacc;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #descricaoBtn:hover {
+            background: #ff88bb;
+            transform: scale(1.1);
+        }
+
+        /* Player de música centralizado */
         #musica {
-            margin-top: 40px;
+            margin-top: 20px;
             display: block;
             margin-left: auto;
             margin-right: auto;
         }
 
+        /* Modal principal (Curtir) */
         #modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        /* Modal para descrição */
+        #modalDescricao {
             position: fixed;
             top: 0;
             left: 0;
@@ -244,6 +285,37 @@
                 transform: translateY(-100vh) scale(1.5);
                 opacity: 0;
             }
+        }
+
+        /* Tela de Abertura */
+        #telaAbertura {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffc1cc, #ffeaf4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        #botaoSurpresa {
+            padding: 20px 40px;
+            font-size: 1.8rem;
+            background-color: #ff4d88;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            transition: transform 0.3s ease;
+        }
+
+        #botaoSurpresa:hover {
+            transform: scale(1.1);
         }
 
         @media (max-width: 500px) {
@@ -298,41 +370,63 @@
     </style>
 </head>
 
-<body onclick="tocarMusica()">
-
-    <div id="modal">
-        <div id="modal-content">
-            <h2>✨ Oi, meu amor! ✨</h2>
-            <p>Quero que saiba o quanto você é especial pra mim 💖</p>
-            <button onclick="fecharModal()">Fechar</button>
-        </div>
+<body>
+    <!-- Tela de Abertura -->
+    <div id="telaAbertura">
+        <button id="botaoSurpresa">🎁 Surpresa</button>
     </div>
 
-    <h1>💖 Eu e Você 💖</h1>
-
-    <div id="texto-contador">Estamos juntos há</div>
-    <div id="contador">
-        <!-- Aqui os blocos de tempo vão aparecer -->
-    </div>
-
-    <div class="carousel-container">
-        <div class="carousel">
-            <img id="fotoAnterior" class="foto-pilha" src="fotos/foto3.jpeg" alt="Foto anterior">
-            <img id="fotoAtual" src="fotos/foto1.jpeg" alt="Foto atual">
-            <img id="fotoProxima" class="foto-pilha" src="fotos/foto2.jpeg" alt="Foto próxima">
-            <div class="carousel-buttons">
-                <button onclick="anterior()">⟨</button>
-                <button onclick="proxima()">⟩</button>
+    <!-- Conteúdo Principal (inicialmente oculto) -->
+    <div id="conteudoPrincipal" style="display: none;">
+        <!-- Modal principal (Curtir) -->
+        <div id="modal">
+            <div id="modal-content">
+                <h2>✨ Oi, meu amor! ✨</h2>
+                <p>Quero que saiba o quanto você é especial pra mim 💖</p>
+                <button onclick="fecharModal()">Fechar</button>
             </div>
         </div>
 
-        <button id="curtirBtn" onclick="mostrarModal()">❤️ Curtir</button>
-    </div>
+        <!-- Modal para Descrição -->
+        <div id="modalDescricao">
+            <div id="modal-content">
+                <h2>📝 Sobre Nós</h2>
+                <p>Uma página feita com carinho para lembrar o quanto somos especiais um para o outro 💕</p>
+                <button onclick="fecharDescricao()">Fechar</button>
+            </div>
+        </div>
 
-    <audio id="musica" controls autoplay loop>
-        <source src="musica.mp3" type="audio/mpeg">
-        Seu navegador não suporta áudio.
-    </audio>
+        <h1>💖 Eu e Você 💖</h1>
+
+        <div id="texto-contador">Estamos juntos há</div>
+        <div id="contador">
+            <!-- Aqui os blocos de tempo vão aparecer -->
+        </div>
+
+        <div class="carousel-container">
+            <div class="carousel">
+                <img id="fotoAnterior" class="foto-pilha" src="fotos/foto3.jpeg" alt="Foto anterior">
+                <img id="fotoAtual" src="fotos/foto1.jpeg" alt="Foto atual">
+                <img id="fotoProxima" class="foto-pilha" src="fotos/foto2.jpeg" alt="Foto próxima">
+                <div class="carousel-buttons">
+                    <button onclick="anterior()">⟨</button>
+                    <button onclick="proxima()">⟩</button>
+                </div>
+            </div>
+
+            <!-- Botões inferiores reposicionados -->
+            <div class="botoes-inferiores">
+                <button id="curtirBtn" onclick="mostrarModal()">❤️ Curtir</button>
+                <button id="descricaoBtn" onclick="mostrarDescricao()">ℹ️ Descrição</button>
+            </div>
+        </div>
+
+        <!-- Player de Música centralizado abaixo da foto principal -->
+        <audio id="musica" controls autoplay loop>
+            <source src="musica.mp3" type="audio/mpeg">
+            Seu navegador não suporta áudio.
+        </audio>
+    </div>
 
     <script>
         const dataInicio = new Date("2023-11-12T00:00:00");
@@ -445,11 +539,24 @@
         atualizarContador();
         setInterval(atualizarContador, 1000);
 
+        // Função para iniciar a música (usada na transição da tela de abertura)
         function tocarMusica() {
             const musica = document.getElementById("musica");
             musica.play().catch(() => { });
-            document.body.onclick = null;
         }
+
+        // Tela de Abertura: transição suave para a página principal e início da música
+        function iniciarPagina() {
+            document.getElementById("telaAbertura").style.opacity = "0";
+            document.getElementById("telaAbertura").style.transform = "translateY(-100%)";
+            setTimeout(() => {
+                document.getElementById("telaAbertura").style.display = "none";
+                document.getElementById("conteudoPrincipal").style.display = "block";
+                tocarMusica();
+            }, 1000);
+        }
+
+        document.getElementById("botaoSurpresa").addEventListener("click", iniciarPagina);
 
         // Carrossel com fotos empilhadas
         const fotos = [
@@ -482,13 +589,22 @@
         atualizarFotos();
         setInterval(proxima, 3000);
 
-        // Modal
+        // Modal principal (Curtir)
         function mostrarModal() {
             document.getElementById("modal").style.display = "flex";
         }
 
         function fecharModal() {
             document.getElementById("modal").style.display = "none";
+        }
+
+        // Modal Descrição
+        function mostrarDescricao() {
+            document.getElementById("modalDescricao").style.display = "flex";
+        }
+
+        function fecharDescricao() {
+            document.getElementById("modalDescricao").style.display = "none";
         }
 
         // Corações subindo
@@ -501,7 +617,6 @@
             setTimeout(() => heart.remove(), 6000);
         }, 500);
     </script>
-
 </body>
 
 </html>
